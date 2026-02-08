@@ -17,7 +17,6 @@ type UploadedFile = {
 };
 
 const uploadFile = async (file: File, onProgress: (progress: number, error?: string, result?: RemoveBackgroundResult & { fileName: string }, previewUrl?: string) => void) => {
-
     const url = URL.createObjectURL(file);
 
     let progress = 0;
@@ -49,15 +48,13 @@ export const PhotoProcessor = (props: { isDisabled?: boolean }) => {
     const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
     const [capability, setCapability] = useState<DeviceCapability | null>(null);
 
-    // Check capabilities on mount
     useEffect(() => {
         getCapabilities().then(setCapability).catch(console.error);
         initializeModel();
     }, []);
 
-    async function initializeModel() {
+    const initializeModel = async () => {
         try {
-            // Subscribe to progress to track initialization
             const unsubscribe = subscribeToProgress((state) => {
                 if (state.phase === 'ready') {
                     console.log('Model ready!');
@@ -65,12 +62,9 @@ export const PhotoProcessor = (props: { isDisabled?: boolean }) => {
                 }
             });
 
-            // Trigger initialization by calling removeBackground with a tiny dummy image
             const dummyImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
             await removeBackground(dummyImage);
-            // Result is discarded, we just needed to trigger the model download
         } catch (error) {
-            // Ignore errors from the dummy init
             console.log('Model initialization triggered');
         }
     }

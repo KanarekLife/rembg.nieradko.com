@@ -200,8 +200,9 @@ export const FileUploadDropZone = ({
             onDragLeave={handleDragOut}
             onDragEnd={handleDragOut}
             onDrop={handleDrop}
+            onClick={() => inputRef.current?.click()}
             className={cx(
-                "relative flex flex-col items-center gap-3 rounded-xl bg-primary px-6 py-4 text-tertiary ring-1 ring-secondary transition duration-100 ease-linear ring-inset",
+                "relative flex flex-col items-center gap-3 rounded-xl bg-primary px-6 py-4 text-tertiary ring-1 ring-secondary transition duration-100 ease-linear ring-inset hover:cursor-pointer",
                 isDraggingOver && "ring-2 ring-brand",
                 isDisabled && "cursor-not-allowed bg-disabled_subtle ring-disabled_subtle",
                 className,
@@ -223,12 +224,7 @@ export const FileUploadDropZone = ({
                         multiple={allowsMultiple}
                         onChange={handleInputFileChange}
                     />
-                    <label htmlFor={id} className="flex cursor-pointer">
-                        <Button color="link-color" size="md" isDisabled={isDisabled} onClick={() => inputRef.current?.click()}>
-                            Click to upload <span className="md:hidden">and attach files</span>
-                        </Button>
-                    </label>
-                    <span className="text-sm max-md:hidden">or drag and drop</span>
+                    <span className="text-sm max-md:hidden">Click to upload or drag and drop</span>
                 </div>
                 <p className={cx("text-xs transition duration-100 ease-linear", isInvalid && "text-error-primary")}>
                     {hint || "SVG, PNG, JPG or GIF"}
@@ -275,7 +271,7 @@ const handleDownload = (result: RemoveBackgroundResult & { fileName: string }) =
     document.body.removeChild(link);
 };
 
-export const FileListItemProgressBar = ({ name, size, progress, error, type, fileIconVariant, onDelete, onRetry, className, result, previewUrl }: FileListItemProps) => {
+export const FileListItemProgressBar = ({ name, progress, error, onDelete, onRetry, className, result, previewUrl }: FileListItemProps) => {
     const isComplete = progress === 100;
     const failed = !!error;
 
@@ -294,21 +290,12 @@ export const FileListItemProgressBar = ({ name, size, progress, error, type, fil
                 }
             </div>
             <div className="flex gap-3">
-                <div className="flex col items-center">
-                    <FileTypeIcon className="size-10 shrink-0 dark:hidden" type={type ?? "empty"} theme="light" variant={fileIconVariant ?? "default"} />
-                    <FileTypeIcon className="size-10 shrink-0 not-dark:hidden" type={type ?? "empty"} theme="dark" variant={fileIconVariant ?? "default"} />
-                </div>
-
                 <div className="flex min-w-0 flex-1 flex-col items-start">
                     <div className="flex w-full max-w-full min-w-0 flex-1">
                         <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-medium text-secondary">{name}</p>
+                            <p className="truncate text-sm font-medium text-secondary text-left">{name}</p>
 
                             <div className="mt-0.5 flex items-center gap-2">
-                                <p className="truncate text-sm whitespace-nowrap text-tertiary">{getReadableFileSize(size)}</p>
-
-                                <hr className="h-3 w-px rounded-t-full rounded-b-full border-none bg-border-primary" />
-
                                 <div className="flex items-center gap-1">
                                     {isComplete && <CheckCircle className="size-4 stroke-[2.5px] text-fg-success-primary" />}
                                     {isComplete && <p className="text-sm font-medium text-success-primary">Complete</p>}

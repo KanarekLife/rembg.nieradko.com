@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { useState, useRef, useCallback } from "react";
+import { motion } from "motion/react";
 import { DotsVertical } from "@untitledui/icons";
 import { cx } from "@/utils/cx";
 
@@ -34,7 +34,7 @@ export const Compare = ({
         if (slideMode === "drag") setIsDragging(false);
     };
 
-    const handleStart = useCallback((clientX: number) => {
+    const handleStart = useCallback(() => {
         if (slideMode === "drag") setIsDragging(true);
     }, [slideMode]);
 
@@ -61,9 +61,9 @@ export const Compare = ({
             style={{ cursor: slideMode === "drag" ? (isDragging ? "grabbing" : "grab") : "col-resize" }}
             onMouseMove={(e) => handleMove(e.clientX)}
             onMouseLeave={mouseLeaveHandler}
-            onMouseDown={(e) => handleStart(e.clientX)}
+            onMouseDown={handleStart}
             onMouseUp={handleEnd}
-            onTouchStart={(e) => handleStart(e.touches[0].clientX)}
+            onTouchStart={handleStart}
             onTouchEnd={handleEnd}
             onTouchMove={(e) => handleMove(e.touches[0].clientX)}
         >

@@ -163,7 +163,7 @@ export interface ButtonProps extends CommonProps, DetailedHTMLProps<Omit<ButtonH
 /**
  * Props for the link variant (anchor tag)
  */
-interface LinkProps extends CommonProps, DetailedHTMLProps<Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "color">, HTMLAnchorElement> {}
+interface LinkProps extends CommonProps, DetailedHTMLProps<Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "color">, HTMLAnchorElement> { }
 
 /** Union type of button and link props */
 export type Props = ButtonProps | LinkProps;

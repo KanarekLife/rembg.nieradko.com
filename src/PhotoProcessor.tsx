@@ -48,11 +48,6 @@ export const PhotoProcessor = (props: { isDisabled?: boolean }) => {
     const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
     const [capability, setCapability] = useState<DeviceCapability | null>(null);
 
-    useEffect(() => {
-        getCapabilities().then(setCapability).catch(console.error);
-        initializeModel();
-    }, []);
-
     const initializeModel = async () => {
         try {
             const unsubscribe = subscribeToProgress((state) => {
@@ -64,10 +59,15 @@ export const PhotoProcessor = (props: { isDisabled?: boolean }) => {
 
             const dummyImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
             await removeBackground(dummyImage);
-        } catch (error) {
+        } catch {
             console.log('Model initialization triggered');
         }
-    }
+    };
+
+    useEffect(() => {
+        getCapabilities().then(setCapability).catch(console.error);
+        initializeModel();
+    }, []);
 
     const handleDropFiles = (files: FileList) => {
         const newFiles = Array.from(files);
@@ -80,7 +80,16 @@ export const PhotoProcessor = (props: { isDisabled?: boolean }) => {
             fileObject: file,
         }));
 
-        setUploadedFiles([...newFilesWithIds.map(({ fileObject: _, ...file }) => file), ...uploadedFiles]);
+        setUploadedFiles((previousFiles) => [
+            ...newFilesWithIds.map((file) => ({
+                id: file.id,
+                name: file.name,
+                type: file.type,
+                size: file.size,
+                progress: file.progress,
+            })),
+            ...previousFiles,
+        ]);
 
         newFilesWithIds.forEach(({ id, fileObject }) => {
             uploadFile(fileObject, (progress, error, result, previewUrl) => {

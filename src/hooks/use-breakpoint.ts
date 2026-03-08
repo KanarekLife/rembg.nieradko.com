@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 const screens = {
     sm: "640px",
@@ -17,18 +17,25 @@ const screens = {
  * @returns A boolean indicating whether the viewport size applies.
  */
 export const useBreakpoint = (size: "sm" | "md" | "lg" | "xl" | "2xl") => {
-    const [matches, setMatches] = useState(typeof window !== "undefined" ? window.matchMedia(`(min-width: ${screens[size]})`).matches : true);
+    const query = `(min-width: ${screens[size]})`;
 
-    useEffect(() => {
-        const breakpoint = window.matchMedia(`(min-width: ${screens[size]})`);
+    const subscribe = (onStoreChange: () => void) => {
+        if (typeof window === "undefined") {
+            return () => {};
+        }
 
-        setMatches(breakpoint.matches);
+        const mediaQueryList = window.matchMedia(query);
+        mediaQueryList.addEventListener("change", onStoreChange);
+        return () => mediaQueryList.removeEventListener("change", onStoreChange);
+    };
 
-        const handleChange = (value: MediaQueryListEvent) => setMatches(value.matches);
+    const getSnapshot = () => {
+        if (typeof window === "undefined") {
+            return true;
+        }
 
-        breakpoint.addEventListener("change", handleChange);
-        return () => breakpoint.removeEventListener("change", handleChange);
-    }, [size]);
+        return window.matchMedia(query).matches;
+    };
 
-    return matches;
+    return useSyncExternalStore(subscribe, getSnapshot, () => true);
 };

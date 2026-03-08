@@ -76,7 +76,7 @@ export const ThemeProvider = ({ children, defaultTheme = "system", storageKey = 
 
         mediaQuery.addEventListener("change", handleChange);
         return () => mediaQuery.removeEventListener("change", handleChange);
-    }, [theme]);
+    }, [theme, darkModeClass, storageKey]);
 
     return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
 };

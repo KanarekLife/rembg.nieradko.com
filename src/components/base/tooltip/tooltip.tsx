@@ -70,9 +70,9 @@ export const Tooltip = ({
                             description ? "py-3" : "py-2",
 
                             isEntering &&
-                                "ease-out animate-in fade-in zoom-in-95 in-placement-left:slide-in-from-right-0.5 in-placement-right:slide-in-from-left-0.5 in-placement-top:slide-in-from-bottom-0.5 in-placement-bottom:slide-in-from-top-0.5",
+                            "ease-out animate-in fade-in zoom-in-95 in-placement-left:slide-in-from-right-0.5 in-placement-right:slide-in-from-left-0.5 in-placement-top:slide-in-from-bottom-0.5 in-placement-bottom:slide-in-from-top-0.5",
                             isExiting &&
-                                "ease-in animate-out fade-out zoom-out-95 in-placement-left:slide-out-to-right-0.5 in-placement-right:slide-out-to-left-0.5 in-placement-top:slide-out-to-bottom-0.5 in-placement-bottom:slide-out-to-top-0.5",
+                            "ease-in animate-out fade-out zoom-out-95 in-placement-left:slide-out-to-right-0.5 in-placement-right:slide-out-to-left-0.5 in-placement-top:slide-out-to-bottom-0.5 in-placement-bottom:slide-out-to-top-0.5",
                         )}
                     >
                         <span className="text-xs font-semibold text-white">{title}</span>
@@ -96,7 +96,7 @@ export const Tooltip = ({
     );
 };
 
-interface TooltipTriggerProps extends AriaButtonProps {}
+type TooltipTriggerProps = AriaButtonProps;
 
 export const TooltipTrigger = ({ children, className, ...buttonProps }: TooltipTriggerProps) => {
     return (
